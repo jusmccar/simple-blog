@@ -4,7 +4,7 @@ import { PostType } from '@app/api/models/Post';
 import { API_URL_POSTS } from '@app/constants';
 import QUERY_KEYS from '@app/api/queryKeys';
 
-const fetchPosts = async (): Promise<PostType[]> => {
+export const fetchPosts = async (): Promise<PostType[]> => {
   const res = await axios.get<PostType[]>(API_URL_POSTS);
 
   return res.data;
