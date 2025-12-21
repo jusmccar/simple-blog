@@ -25,6 +25,7 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src",
+	"node_modules/vitest/globals.d.ts"
   ]
 }
