@@ -26,6 +26,10 @@ describe('useCreatePost', () => {
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('Calls uploadPost when mutate is called', async () => {
     const mockedPostData = new FormData();
     mockedPostData.append('id', '1');
