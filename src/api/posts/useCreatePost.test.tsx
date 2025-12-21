@@ -5,6 +5,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { PostType } from '@app/api/models/Post';
 import * as apis from '@app/api/posts/apis';
 import useCreatePost from '@app/api/posts/useCreatePost';
+import queryClientModule from '@app/api/queryClient';
 
 describe('useCreatePost', () => {
   const mockedPost: PostType = {
@@ -39,6 +40,25 @@ describe('useCreatePost', () => {
     await waitFor(() => {
       expect(uploadPostSpy).toHaveBeenCalledTimes(1);
       expect(uploadPostSpy).toHaveBeenCalledWith(mockedPostData);
+    });
+  });
+
+  it('Invalidate queries on success', async () => {
+    const mockedPostData = new FormData();
+    mockedPostData.append('id', '1');
+    mockedPostData.append('title', 'title');
+    mockedPostData.append('description', 'description');
+
+    const uploadPostSpy = vi.spyOn(apis, 'default').mockResolvedValue(mockedPost);
+    const invalidateQueriesSpy = vi.spyOn(queryClientModule, 'invalidateQueries');
+
+    const { result } = renderHook(() => useCreatePost(), { wrapper });
+    result.current.mutate(mockedPostData);
+
+    await waitFor(() => {
+      expect(uploadPostSpy).toHaveBeenCalledTimes(1);
+      expect(invalidateQueriesSpy).toHaveBeenCalledTimes(1);
+      expect(invalidateQueriesSpy).toHaveBeenCalledWith({ queryKey: ['POSTS'] });
     });
   });
 });
