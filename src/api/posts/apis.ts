@@ -28,4 +28,10 @@ export const patchPost = async ({ id, formData }: PatchPostType): Promise<PostTy
   return response.data;
 };
 
+export const deletePost = async (id: number): Promise<string> => {
+  const res = await axios.delete(`${API_URL_POSTS}${id}`);
+
+  return res.data.message;
+};
+
 export default uploadPost;
