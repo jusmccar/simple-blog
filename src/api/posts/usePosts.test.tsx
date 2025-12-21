@@ -3,8 +3,7 @@ import { ReactElement, ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { PostType } from '@app/api/models/Post';
-import usePosts, { fetchPosts } from '@app/api/posts/usePosts';
-import { API_URL_POSTS } from '@app/constants';
+import usePosts from '@app/api/posts/usePosts';
 import { renderHook, waitFor } from '@testing-library/react';
 
 vi.mock('axios');
@@ -25,27 +24,17 @@ describe('usePosts', () => {
     },
   ];
 
-  describe('fetchPosts', () => {
-    it('Returns the correct data from API', async () => {
-      vi.mocked(axios.get).mockResolvedValue({ data: mockedPosts });
+  const queryClient = new QueryClient();
+  const wrapper = ({ children }: { children: ReactNode }): ReactElement => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
 
-      const response = await fetchPosts();
-      expect(response).toStrictEqual(mockedPosts);
-      expect(axios.get).toHaveBeenCalledWith(API_URL_POSTS);
-    });
-  });
+  it('Returns the posts from API', async () => {
+    vi.mocked(axios.get).mockResolvedValue({ data: mockedPosts });
 
-  describe('usePosts', () => {
-    it('Returns the posts from API', async () => {
-      const queryClient = new QueryClient();
-      const wrapper = ({ children }: { children: ReactNode }): ReactElement => (
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-      );
-      vi.mocked(axios.get).mockResolvedValue({ data: mockedPosts });
+    const { result } = renderHook(() => usePosts(), { wrapper });
 
-      const { result } = renderHook(() => usePosts(), { wrapper });
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
-      expect(result.current.data).toEqual(mockedPosts);
-    });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data).toEqual(mockedPosts);
   });
 });
