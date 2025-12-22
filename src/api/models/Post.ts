@@ -15,4 +15,5 @@ export interface PostType {
     name: string;
   };
   publishedDate: string;
+  numberOfComments: number;
 }

@@ -11,6 +11,7 @@ const getTestPost = (): PostType => ({
   },
   image: {},
   publishedDate: '',
+  numberOfComments: 0,
 });
 
 export default getTestPost;
