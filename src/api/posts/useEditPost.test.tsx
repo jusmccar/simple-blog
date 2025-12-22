@@ -6,21 +6,10 @@ import { PostType } from '@app/api/models/Post';
 import * as apis from '@app/api/posts/apis';
 import useEditPost from '@app/api/posts/useEditPost';
 import queryClientModule from '@app/api/queryClient';
+import getTestPost from '@app/testFactories/PostFactory';
 
 describe('useEditPost', () => {
-  const mockedPost: PostType = {
-    id: 1,
-    title: 'title',
-    description: 'description',
-    createdAt: '',
-    author: {
-      avatarUrl: '',
-      name: 'Justin',
-    },
-    image: {},
-    publishedDate: '',
-  };
-
+  const mockedPost: PostType = getTestPost();
   const queryClient = new QueryClient();
   const wrapper = ({ children }: { children: ReactNode }): ReactElement => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
