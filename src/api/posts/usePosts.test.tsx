@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { ReactElement, ReactNode } from 'react';
+import { faker } from '@faker-js/faker';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 
@@ -10,7 +11,10 @@ import getTestPost from '@app/testFactories/PostFactory';
 vi.mock('axios');
 
 describe('usePosts', () => {
-  const mockedPosts: PostType[] = [getTestPost()];
+  const mockedPosts: PostType[] = Array.from(
+    { length: faker.number.int({ min: 1, max: 20 }) },
+    () => getTestPost(),
+  );
   const queryClient = new QueryClient();
   const wrapper = ({ children }: { children: ReactNode }): ReactElement => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
