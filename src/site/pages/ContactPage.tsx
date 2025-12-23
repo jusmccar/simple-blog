@@ -19,35 +19,37 @@ const ContactPage = (): ReactElement => {
       <Title level={2}>Contact</Title>
 
       <Paragraph>
-        If you have any <Text strong>questions</Text>, <Text strong>suggestions</Text>, or just want to say hello — feel free to reach out! I'm always happy to connect with fellow developers and learners.
+        If you have any <Text strong>questions</Text>, <Text strong>suggestions</Text>, or just want
+        to say hello — feel free to reach out! I'm always happy to connect with fellow developers
+        and learners.
       </Paragraph>
 
       <Space direction="vertical" size="middle">
         <Button
           type="link"
           icon={<MailOutlined />}
-          href="mailto:contact@1programmer.de"
+          href="mailto:justinmccartney1@yahoo.com"
           target="_blank"
         >
-          contact [@] 1programmer.de
+          justinmccartney1 [@] yahoo.com
         </Button>
 
         <Button
           type="link"
           icon={<GithubOutlined />}
-          href="https://github.com/bmehrabi"
+          href="https://github.com/jusmccar"
           target="_blank"
         >
-          github.com/bmehrabi
+          github.com/jusmccar
         </Button>
 
         <Button
           type="link"
           icon={<LinkedinOutlined />}
-          href="https://www.linkedin.com/in/babak-mehrabi/"
+          href="https://www.linkedin.com/in/justinmccartney/"
           target="_blank"
         >
-          linkedin.com/in/babak-mehrabi/
+          linkedin.com/in/justinmccartney/
         </Button>
       </Space>
     </StyledCard>
