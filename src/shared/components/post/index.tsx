@@ -14,10 +14,7 @@ const Post = ({ post }: { post: PostType }): ReactElement => {
 
   return (
     <StyledCard cover={<img alt={title} src={image?.url} />}>
-      <Meta
-        avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
-        title={title}
-      />
+      <Meta avatar={<Avatar src={post.author.avatarUrl} />} title={title} />
     </StyledCard>
   );
 };
