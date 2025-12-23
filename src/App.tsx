@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from '@app/api/queryClient';
 import MainLayout from '@app/site/mainLayout';
-import BlogPage from '@app/site/pages/blogPage';
+import BlogPage from '@app/site/pages/BlogPage';
 import AdminLayout from '@app/admin/adminLayout';
 import PostsPage from '@app/admin/pages/posts/postsPage';
 import CreatePostPage from '@app/admin/pages/posts/createPostPage';
