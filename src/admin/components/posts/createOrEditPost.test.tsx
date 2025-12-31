@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { MemoryRouter } from 'react-router-dom';
 import { Mock } from 'vitest';
 import { faker } from '@faker-js/faker';
@@ -33,11 +34,6 @@ describe('<CreateOrEditPost />', () => {
   const createPost = vi.fn();
 
   const setup = () => {
-    (useCreatePost as Mock).mockReturnValue({
-      mutateAsync: createPost,
-      isPending: false,
-    });
-
     return render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
@@ -47,25 +43,13 @@ describe('<CreateOrEditPost />', () => {
     );
   };
 
-  it('Renders an empty form', () => {
-    setup();
-
-    expect(screen.getAllByRole('textbox')).toHaveLength(2);
-    expect(screen.getByText('Title')).toBeInTheDocument();
-
-    const buttons = screen.getAllByRole('button');
-
-    expect(buttons).toHaveLength(2);
-    expect(buttons[0]).toHaveTextContent('Click to Upload');
-    expect(buttons[1]).toHaveTextContent('Submit Post');
-  });
-
-  it('Users can create a post', async () => {
-    const { container } = setup();
-    const user = userEvent.setup();
+  const fillCreatePostForm = async () => {
     const postTitle = faker.lorem.sentences();
     const postDescription = faker.lorem.paragraph();
     const imageName = faker.system.fileName();
+
+    const { container } = setup();
+    const user = userEvent.setup();
 
     const inputs = screen.getAllByRole('textbox');
 
@@ -84,7 +68,38 @@ describe('<CreateOrEditPost />', () => {
 
     await userEvent.click(submitButton);
 
-    waitFor(() => {
+    return {
+      postTitle,
+      postDescription,
+      imageName,
+    };
+  };
+
+  beforeEach(() => {
+    (useCreatePost as Mock).mockReturnValue({
+      mutateAsync: createPost,
+      isPending: false,
+    });
+  });
+
+  it('Renders an empty form', () => {
+    setup();
+
+    expect(screen.getAllByRole('textbox')).toHaveLength(2);
+    expect(screen.getByText('Title')).toBeInTheDocument();
+    expect(screen.getByTestId('mock-ckeditor')).toBeInTheDocument();
+
+    const buttons = screen.getAllByRole('button');
+
+    expect(buttons).toHaveLength(2);
+    expect(buttons[0]).toHaveTextContent('Click to Upload');
+    expect(buttons[1]).toHaveTextContent('Submit Post');
+  });
+
+  it('Calls createPost mutation when users fill the form', async () => {
+    const { postTitle, postDescription, imageName } = await fillCreatePostForm();
+
+    await waitFor(() => {
       expect(createPost).toHaveBeenCalledTimes(1);
 
       const formDataArg = createPost.mock.calls[0][0];
@@ -98,6 +113,18 @@ describe('<CreateOrEditPost />', () => {
       expect(formDataEntries.description).toBe(postDescription);
       expect(formDataEntries.image).toBeInstanceOf(File);
       expect((formDataEntries.image as File).name).toBe(imageName);
+    });
+  });
+
+  it('Users see a message if createPost mutation fails', async () => {
+    const errorPost = vi.spyOn(message, 'error');
+    (useCreatePost as Mock).mockRejectedValue(new Error('Create post mutation failed'));
+
+    await fillCreatePostForm();
+
+    await waitFor(() => {
+      expect(errorPost).toHaveBeenCalledTimes(1);
+      expect(errorPost).toHaveBeenCalledWith('Error on creation of the post');
     });
   });
 });
