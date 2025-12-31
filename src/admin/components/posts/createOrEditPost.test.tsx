@@ -66,11 +66,11 @@ describe('<CreateOrEditPost />', () => {
 
     const file = new File(['Sample File Content'], imageName, { type: 'image/png' });
 
-    await userEvent.upload(fileInput as HTMLElement, file);
+    await user.upload(fileInput as HTMLElement, file);
 
     const submitButton = screen.getByRole('button', { name: 'Submit Post' });
 
-    await userEvent.click(submitButton);
+    await user.click(submitButton);
 
     return {
       postTitle,
@@ -166,11 +166,11 @@ describe('<CreateOrEditPost />', () => {
 
     const file = new File(['Sample File Content'], imageName, { type: 'image/png' });
 
-    await userEvent.upload(fileInput as HTMLElement, file);
+    await user.upload(fileInput as HTMLElement, file);
 
     const submitButton = screen.getByRole('button', { name: 'Submit Post' });
 
-    await userEvent.click(submitButton);
+    await user.click(submitButton);
 
     await waitFor(() => {
       expect(editPost).toHaveBeenCalledTimes(1);
@@ -209,7 +209,7 @@ describe('<CreateOrEditPost />', () => {
 
     const submitButton = screen.getByRole('button', { name: 'Submit Post' });
 
-    await userEvent.click(submitButton);
+    await user.click(submitButton);
 
     await waitFor(() => {
       expect(errorSpy).toHaveBeenCalledTimes(1);
