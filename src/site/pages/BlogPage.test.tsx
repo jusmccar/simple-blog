@@ -16,7 +16,7 @@ vi.mock('@app/api/posts/usePosts');
 vi.mock('@app/api/posts/usePost');
 
 describe('BlogPage', () => {
-  const setupMockedPosts = () => {
+  const setup = () => {
     const mockedPosts: PostType[] = Array.from(
       { length: faker.number.int({ min: 1, max: 20 }) },
       () => getTestPost(),
@@ -51,7 +51,7 @@ describe('BlogPage', () => {
   };
 
   it('Renders posts correctly', () => {
-    const mockedPosts = setupMockedPosts();
+    const mockedPosts = setup();
 
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
 
@@ -64,7 +64,7 @@ describe('BlogPage', () => {
   });
 
   it('Navigates to /post/id page after clicking on the items', async () => {
-    const mockedPosts = setupMockedPosts();
+    const mockedPosts = setup();
     const user = userEvent.setup();
 
     const links = screen.getAllByRole('link');

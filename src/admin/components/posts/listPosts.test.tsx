@@ -22,7 +22,7 @@ describe('<ListPosts />', () => {
   const queryClient = new QueryClient();
   const deletePost = vi.fn();
 
-  const setupMockedPosts = (minNumberOfPosts: number = 1, maxNumberOfPosts: number = 20) => {
+  const setup = (minNumberOfPosts: number = 1, maxNumberOfPosts: number = 20) => {
     const mockedPosts: PostType[] = Array.from(
       { length: faker.number.int({ min: minNumberOfPosts, max: maxNumberOfPosts }) },
       () => getTestPost(),
@@ -72,7 +72,7 @@ describe('<ListPosts />', () => {
   });
 
   it('Renders a table with a list of posts', () => {
-    const mockedPosts = setupMockedPosts(1, 10);
+    const mockedPosts = setup(1, 10);
 
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
 
@@ -94,7 +94,7 @@ describe('<ListPosts />', () => {
   });
 
   it('Renders a table with pagination if the number of posts is more than 10', () => {
-    const mockedPosts = setupMockedPosts(11, 20);
+    const mockedPosts = setup(11, 20);
 
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
 
@@ -104,7 +104,7 @@ describe('<ListPosts />', () => {
   });
 
   it('Shows the edit post page when the user clicks on the edit button', async () => {
-    const mockedPosts = setupMockedPosts(1, 5);
+    const mockedPosts = setup(1, 5);
     const user = userEvent.setup();
 
     const links = screen.getAllByRole('link');
@@ -117,7 +117,7 @@ describe('<ListPosts />', () => {
   });
 
   it('Shows a confirmation box when the user clicks on the delete button', async () => {
-    const mockedPosts = setupMockedPosts(1, 5);
+    const mockedPosts = setup(1, 5);
     const user = userEvent.setup();
 
     const deleteButtons = screen.getAllByRole('button', { name: 'Delete' });
@@ -131,7 +131,7 @@ describe('<ListPosts />', () => {
   });
 
   it('Calls deletePost if the user confirms the deletion', async () => {
-    const mockedPosts = setupMockedPosts(1, 5);
+    const mockedPosts = setup(1, 5);
     const user = userEvent.setup();
 
     const deleteButtons = screen.getAllByRole('button', { name: 'Delete' });
