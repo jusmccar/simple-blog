@@ -107,4 +107,18 @@ describe('<ListPosts />', () => {
 
     expect(screen.getByText('Edit Post')).toBeInTheDocument();
   });
+
+  it('Shows a confirmation box when the user clicks on the delete button', async () => {
+    const mockedPosts = setupMockedPosts(1, 5);
+    const user = userEvent.setup();
+
+    const deleteButtons = screen.getAllByRole('button', { name: 'Delete' });
+    const confirmationText = 'Are you sure you want to delete this post?';
+
+    expect(screen.queryByText(confirmationText)).not.toBeInTheDocument();
+
+    await user.click(deleteButtons[0]);
+
+    expect(screen.getByText(confirmationText)).toBeInTheDocument();
+  });
 });
