@@ -80,6 +80,8 @@ describe('<CreateOrEditPost />', () => {
   };
 
   beforeEach(() => {
+    vi.clearAllMocks();
+
     (useCreatePost as Mock).mockReturnValue({
       mutateAsync: createPost,
       isPending: false,
@@ -188,6 +190,30 @@ describe('<CreateOrEditPost />', () => {
 
       expect(successPost).toHaveBeenCalledTimes(1);
       expect(successPost).toHaveBeenCalledWith('Post has been updated successfully!');
+    });
+  });
+
+  it('Shows an error message if users have not selected a file', async () => {
+    const postTitle = faker.lorem.sentences();
+    const postDescription = faker.lorem.paragraph();
+
+    const errorPost = vi.spyOn(message, 'error');
+
+    setup();
+    const user = userEvent.setup();
+
+    const inputs = screen.getAllByRole('textbox');
+
+    await user.type(inputs[0], postTitle);
+    await user.type(inputs[1], postDescription);
+
+    const submitButton = screen.getByRole('button', { name: 'Submit Post' });
+
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(errorPost).toHaveBeenCalledTimes(1);
+      expect(errorPost).toHaveBeenCalledWith('Please upload an image.');
     });
   });
 });
