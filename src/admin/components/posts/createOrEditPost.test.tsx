@@ -68,13 +68,13 @@ describe('<CreateOrEditPost />', () => {
     await user.type(inputs[0], 'Post Title');
     await user.type(inputs[1], 'Content of the Post');
 
-    const fileInput = container.querySelector('input[type="file"]') as HTMLElement;
+    const fileInput = container.querySelector('input[type="file"]');
 
     expect(fileInput).toBeDefined();
 
     const file = new File(['Sample File Content'], 'feature-image.png', { type: 'image/png' });
 
-    await userEvent.upload(fileInput, file);
+    await userEvent.upload(fileInput as HTMLElement, file);
 
     const submitButton = screen.getByRole('button', { name: 'Submit Post' });
 
