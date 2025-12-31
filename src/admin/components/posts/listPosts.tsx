@@ -49,7 +49,7 @@ const ListPosts = (): ReactElement => {
     },
   ];
 
-  return <Table dataSource={posts} columns={columns} />;
+  return <Table dataSource={posts} columns={columns} rowKey="id" />;
 };
 
 export default ListPosts;

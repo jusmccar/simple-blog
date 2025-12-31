@@ -14,3 +14,9 @@ if (typeof window.matchMedia !== 'function') {
     };
   };
 }
+
+Object.defineProperty(window, 'getComputedStyle', {
+  value: () => ({
+    getPropertyValue: () => '',
+  }),
+});
