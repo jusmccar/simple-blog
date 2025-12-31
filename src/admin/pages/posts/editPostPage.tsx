@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import React, { ReactElement } from 'react';
 import CreateOrEditPost from '@app/admin/components/posts/createOrEditPost';
 import usePost from '@app/api/posts/usePost';
@@ -15,6 +15,7 @@ const EditPostPage = (): ReactElement => {
   return (
     <Row>
       <Col span={12} offset={6}>
+        <Typography.Title>Edit Post</Typography.Title>
         <CreateOrEditPost post={post} />
       </Col>
     </Row>
