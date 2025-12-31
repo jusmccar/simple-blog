@@ -128,21 +128,21 @@ describe('<CreateOrEditPost />', () => {
   });
 
   it('Users see a message if createPost mutation fails', async () => {
-    const errorPost = vi.spyOn(message, 'error');
+    const errorSpy = vi.spyOn(message, 'error');
     (useCreatePost as Mock).mockRejectedValue(new Error('Create post mutation failed'));
 
     await fillCreatePostForm();
 
     await waitFor(() => {
-      expect(errorPost).toHaveBeenCalledTimes(1);
-      expect(errorPost).toHaveBeenCalledWith('Error on creation of the post');
+      expect(errorSpy).toHaveBeenCalledTimes(1);
+      expect(errorSpy).toHaveBeenCalledWith('Error on creation of the post');
     });
   });
 
   it('Calls the editPost mutation if a post is passed', async () => {
     const imageName = faker.system.fileName();
 
-    const successPost = vi.spyOn(message, 'success');
+    const successSpy = vi.spyOn(message, 'success');
     const post = getTestPost();
 
     const { container } = render(
@@ -188,8 +188,8 @@ describe('<CreateOrEditPost />', () => {
       expect(formDataEntries.image).toBeInstanceOf(File);
       expect((formDataEntries.image as File).name).toBe(imageName);
 
-      expect(successPost).toHaveBeenCalledTimes(1);
-      expect(successPost).toHaveBeenCalledWith('Post has been updated successfully!');
+      expect(successSpy).toHaveBeenCalledTimes(1);
+      expect(successSpy).toHaveBeenCalledWith('Post has been updated successfully!');
     });
   });
 
@@ -197,7 +197,7 @@ describe('<CreateOrEditPost />', () => {
     const postTitle = faker.lorem.sentences();
     const postDescription = faker.lorem.paragraph();
 
-    const errorPost = vi.spyOn(message, 'error');
+    const errorSpy = vi.spyOn(message, 'error');
 
     setup();
     const user = userEvent.setup();
@@ -212,8 +212,8 @@ describe('<CreateOrEditPost />', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(errorPost).toHaveBeenCalledTimes(1);
-      expect(errorPost).toHaveBeenCalledWith('Please upload an image.');
+      expect(errorSpy).toHaveBeenCalledTimes(1);
+      expect(errorSpy).toHaveBeenCalledWith('Please upload an image.');
     });
   });
 });
