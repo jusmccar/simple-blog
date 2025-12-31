@@ -20,11 +20,3 @@ Object.defineProperty(window, 'getComputedStyle', {
     getPropertyValue: () => '',
   }),
 });
-
-vi.mock('@ckeditor/ckeditor5-build-classic', () => ({
-  default: {},
-}));
-
-vi.mock('@ckeditor/ckeditor5-react', () => ({
-  CKEditor: () => null,
-}));

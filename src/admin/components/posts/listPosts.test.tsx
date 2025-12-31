@@ -18,6 +18,14 @@ vi.mock('@app/api/posts/usePosts');
 vi.mock('@app/api/posts/usePost');
 vi.mock('@app/api/posts/useDeletePost');
 
+vi.mock('@ckeditor/ckeditor5-build-classic', () => ({
+  default: {},
+}));
+
+vi.mock('@ckeditor/ckeditor5-react', () => ({
+  CKEditor: () => null,
+}));
+
 describe('<ListPosts />', () => {
   const queryClient = new QueryClient();
   const deletePost = vi.fn();
