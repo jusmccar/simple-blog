@@ -1,5 +1,6 @@
 import { MemoryRouter } from 'react-router-dom';
 import { Mock } from 'vitest';
+import { faker } from '@faker-js/faker';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -62,17 +63,20 @@ describe('<CreateOrEditPost />', () => {
   it('Users can create a post', async () => {
     const { container } = setup();
     const user = userEvent.setup();
+    const postTitle = faker.lorem.sentences();
+    const postDescription = faker.lorem.paragraph();
+    const imageName = faker.system.fileName();
 
     const inputs = screen.getAllByRole('textbox');
 
-    await user.type(inputs[0], 'Post Title');
-    await user.type(inputs[1], 'Content of the Post');
+    await user.type(inputs[0], postTitle);
+    await user.type(inputs[1], postDescription);
 
     const fileInput = container.querySelector('input[type="file"]');
 
     expect(fileInput).toBeDefined();
 
-    const file = new File(['Sample File Content'], 'feature-image.png', { type: 'image/png' });
+    const file = new File(['Sample File Content'], imageName, { type: 'image/png' });
 
     await userEvent.upload(fileInput as HTMLElement, file);
 
@@ -90,10 +94,10 @@ describe('<CreateOrEditPost />', () => {
         formDataEntries[key] = value;
       });
 
-      expect(formDataEntries.title).toBe('Post Title');
-      expect(formDataEntries.description).toBe('Content of the Post');
+      expect(formDataEntries.title).toBe(postTitle);
+      expect(formDataEntries.description).toBe(postDescription);
       expect(formDataEntries.image).toBeInstanceOf(File);
-      expect((formDataEntries.image as File).name).toBe('feature-image.png');
+      expect((formDataEntries.image as File).name).toBe(imageName);
     });
   });
 });
