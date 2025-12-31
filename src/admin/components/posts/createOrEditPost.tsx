@@ -21,10 +21,10 @@ const CreateOrEditPost = ({ post }: CreatePostPropsType): ReactElement => {
     try {
       if (post) {
         await editPost({ id: post.id, formData });
-        message.success('Post has been updated successfully.!');
+        message.success('Post has been updated successfully!');
       } else {
         await createPost(formData);
-        message.success('Post has been created successfully.!');
+        message.success('Post has been created successfully!');
       }
     } catch (error) {
       message.error('Error on creation of the post');
