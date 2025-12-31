@@ -82,6 +82,18 @@ describe('<CreateOrEditPost />', () => {
 
     waitFor(() => {
       expect(createPost).toHaveBeenCalledTimes(1);
+
+      const formDataArg = createPost.mock.calls[0][0];
+      const formDataEntries: Record<string, unknown> = {};
+
+      formDataArg.forEach((value: unknown, key: string) => {
+        formDataEntries[key] = value;
+      });
+
+      expect(formDataEntries.title).toBe('Post Title');
+      expect(formDataEntries.description).toBe('Content of the Post');
+      expect(formDataEntries.image).toBeInstanceOf(File);
+      expect((formDataEntries.image as File).name).toBe('feature-image.png');
     });
   });
 });
