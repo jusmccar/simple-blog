@@ -17,7 +17,7 @@ describe('useDeletePost', () => {
   });
 
   it('Calls deletePost when mutate is called', async () => {
-    const deletePostSpy = vi.spyOn(apis, 'deletePost');
+    const deletePostSpy = vi.spyOn(apis, 'deletePost').mockResolvedValue('success');
 
     const { result } = renderHook(() => useDeletePost(), { wrapper });
     result.current.mutate(1);
