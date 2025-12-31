@@ -9,15 +9,18 @@ import ListPosts from '@app/admin/components/posts/listPosts';
 import EditPostPage from '@app/admin/pages/posts/editPostPage';
 import PostsPage from '@app/admin/pages/posts/postsPage';
 import { PostType } from '@app/api/models/Post';
+import useDeletePost from '@app/api/posts/useDeletePost';
 import usePost from '@app/api/posts/usePost';
 import usePosts from '@app/api/posts/usePosts';
 import getTestPost from '@app/testFactories/PostFactory';
 
 vi.mock('@app/api/posts/usePosts');
 vi.mock('@app/api/posts/usePost');
+vi.mock('@app/api/posts/useDeletePost');
 
 describe('<ListPosts />', () => {
   const queryClient = new QueryClient();
+  const deletePost = vi.fn();
 
   const setupMockedPosts = (minNumberOfPosts: number = 1, maxNumberOfPosts: number = 20) => {
     const mockedPosts: PostType[] = Array.from(
@@ -35,6 +38,11 @@ describe('<ListPosts />', () => {
       data: mockedPosts[0],
       isLoading: false,
       error: null,
+    });
+
+    (useDeletePost as Mock).mockReturnValue({
+      mutate: deletePost,
+      isPending: false,
     });
 
     render(
@@ -120,5 +128,23 @@ describe('<ListPosts />', () => {
     await user.click(deleteButtons[0]);
 
     expect(screen.getByText(confirmationText)).toBeInTheDocument();
+  });
+
+  it('Calls deletePost if the user confirms the deletion', async () => {
+    const mockedPosts = setupMockedPosts(1, 5);
+    const user = userEvent.setup();
+
+    const deleteButtons = screen.getAllByRole('button', { name: 'Delete' });
+
+    await user.click(deleteButtons[0]);
+
+    expect(deletePost).toHaveBeenCalledTimes(0);
+
+    const yesButtons = screen.getAllByRole('button', { name: 'Yes' });
+
+    await user.click(yesButtons[0]);
+
+    expect(deletePost).toHaveBeenCalledTimes(1);
+    expect(deletePost).toHaveBeenCalledWith(mockedPosts[0].id);
   });
 });
